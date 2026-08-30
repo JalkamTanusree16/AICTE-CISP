@@ -18,16 +18,16 @@ export const CurriculumBuilderPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 text-black">
-      <div className="bg-white p-4 rounded border-2 border-slate-400 shadow-2xs">
-        <div className="text-xs font-black text-amber-900 uppercase tracking-wider">Interactive Academic Builder</div>
-        <h2 className="text-xl font-black text-black tracking-tight">Structured Course & Syllabus Builder</h2>
-        <p className="text-xs text-black font-extrabold">Create, configure, and align hierarchical course schemes (Semesters → Courses → Units → Outcomes)</p>
+    <div className="max-w-4xl mx-auto space-y-6 text-slate-900 font-sans">
+      <div className="bg-white p-4 rounded border border-slate-300 shadow-2xs">
+        <div className="text-xs font-semibold text-amber-950 uppercase tracking-wider">Interactive Academic Builder</div>
+        <h2 className="text-xl font-semibold text-slate-900 tracking-tight">Structured Course & Syllabus Builder</h2>
+        <p className="text-xs text-slate-700 font-medium">Create, configure, and align hierarchical course schemes (Semesters → Courses → Units → Outcomes)</p>
       </div>
 
-      <div className="bg-white p-6 rounded border-2 border-slate-400 shadow-2xs space-y-5">
+      <div className="bg-white p-6 rounded border border-slate-300 shadow-2xs space-y-5">
         {saved && (
-          <div className="bg-emerald-100 border-2 border-emerald-500 text-black text-xs p-3 rounded font-black">
+          <div className="bg-emerald-50 border border-emerald-300 text-emerald-950 text-xs p-3 rounded font-semibold">
             ✓ Course saved to active curriculum draft successfully!
           </div>
         )}
@@ -35,16 +35,16 @@ export const CurriculumBuilderPage: React.FC = () => {
         <form onSubmit={handleSave} className="space-y-5">
           {/* Course Identity */}
           <div>
-            <h4 className="text-xs font-black text-black uppercase tracking-wider mb-3 border-b-2 border-slate-300 pb-1">
+            <h4 className="text-xs font-semibold text-slate-900 uppercase tracking-wider mb-3 border-b border-slate-200 pb-1">
               Course Identity & Credit Structure
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-black text-black mb-1 uppercase tracking-wide">Semester</label>
+                <label className="block text-xs font-semibold text-slate-900 mb-1 uppercase tracking-wide">Semester</label>
                 <select
                   value={semester}
                   onChange={(e) => setSemester(Number(e.target.value))}
-                  className="w-full bg-white border-2 border-slate-500 rounded px-3 py-2 text-xs font-black text-black focus:outline-none focus:border-black"
+                  className="w-full bg-white border border-slate-400 rounded px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:border-slate-800"
                 >
                   {[1, 2, 3, 4, 5, 6, 7, 8].map(s => (
                     <option key={s} value={s}>Semester {s}</option>
@@ -53,70 +53,70 @@ export const CurriculumBuilderPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-black text-black mb-1 uppercase tracking-wide">Course Code</label>
+                <label className="block text-xs font-semibold text-slate-900 mb-1 uppercase tracking-wide">Course Code</label>
                 <input
                   type="text"
                   required
                   value={courseCode}
                   onChange={(e) => setCourseCode(e.target.value)}
-                  className="w-full bg-white border-2 border-slate-500 rounded px-3 py-2 text-xs font-mono font-black text-black focus:outline-none focus:border-black"
+                  className="w-full bg-white border border-slate-400 rounded px-3 py-2 text-xs font-mono font-medium text-slate-900 focus:outline-none focus:border-slate-800"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-black text-black mb-1 uppercase tracking-wide">Course Credits</label>
+                <label className="block text-xs font-semibold text-slate-900 mb-1 uppercase tracking-wide">Course Credits</label>
                 <input
                   type="number"
                   step="0.5"
                   value={credits}
                   onChange={(e) => setCredits(Number(e.target.value))}
-                  className="w-full bg-white border-2 border-slate-500 rounded px-3 py-2 text-xs font-black text-black focus:outline-none focus:border-black"
+                  className="w-full bg-white border border-slate-400 rounded px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:border-slate-800"
                 />
               </div>
             </div>
 
             <div className="mt-3">
-              <label className="block text-xs font-black text-black mb-1 uppercase tracking-wide">Course Title</label>
+              <label className="block text-xs font-semibold text-slate-900 mb-1 uppercase tracking-wide">Course Title</label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full bg-white border-2 border-slate-500 rounded px-3 py-2 text-xs font-black text-black focus:outline-none focus:border-black"
+                className="w-full bg-white border border-slate-400 rounded px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:border-slate-800"
               />
             </div>
 
             <div className="grid grid-cols-3 gap-3 mt-3">
               <div>
-                <label className="block text-xs font-black text-black mb-1 uppercase tracking-wide">Lecture Hours / Week</label>
+                <label className="block text-xs font-semibold text-slate-900 mb-1 uppercase tracking-wide">Lecture Hours / Week</label>
                 <input type="number" value={lectureHours} onChange={(e) => setLectureHours(Number(e.target.value))}
-                  className="w-full bg-white border-2 border-slate-500 rounded px-3 py-2 text-xs font-black text-black focus:outline-none" />
+                  className="w-full bg-white border border-slate-400 rounded px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none" />
               </div>
               <div>
-                <label className="block text-xs font-black text-black mb-1 uppercase tracking-wide">Tutorial Hours / Week</label>
+                <label className="block text-xs font-semibold text-slate-900 mb-1 uppercase tracking-wide">Tutorial Hours / Week</label>
                 <input type="number" value={tutorialHours} onChange={(e) => setTutorialHours(Number(e.target.value))}
-                  className="w-full bg-white border-2 border-slate-500 rounded px-3 py-2 text-xs font-black text-black focus:outline-none" />
+                  className="w-full bg-white border border-slate-400 rounded px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none" />
               </div>
               <div>
-                <label className="block text-xs font-black text-black mb-1 uppercase tracking-wide">Practical Hours / Week</label>
+                <label className="block text-xs font-semibold text-slate-900 mb-1 uppercase tracking-wide">Practical Hours / Week</label>
                 <input type="number" value={practicalHours} onChange={(e) => setPracticalHours(Number(e.target.value))}
-                  className="w-full bg-white border-2 border-slate-500 rounded px-3 py-2 text-xs font-black text-black focus:outline-none" />
+                  className="w-full bg-white border border-slate-400 rounded px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none" />
               </div>
             </div>
           </div>
 
           {/* Unit Builder */}
           <div>
-            <h4 className="text-xs font-black text-black uppercase tracking-wider mb-3 border-b-2 border-slate-300 pb-1">
+            <h4 className="text-xs font-semibold text-slate-900 uppercase tracking-wider mb-3 border-b border-slate-200 pb-1">
               Syllabus Units & Topics
             </h4>
 
             <div className="space-y-3">
               {[1, 2, 3].map((unitNum) => (
-                <div key={unitNum} className="border-2 border-slate-400 rounded p-4 bg-slate-100 space-y-3 shadow-2xs">
+                <div key={unitNum} className="border border-slate-300 rounded p-4 bg-slate-50 space-y-3 shadow-2xs">
                   <div className="flex justify-between items-center">
-                    <h5 className="text-xs font-black text-black uppercase">Unit {unitNum}</h5>
-                    <span className="text-xs text-black font-extrabold">~8 Hours Prescribed</span>
+                    <h5 className="text-xs font-semibold text-slate-900 uppercase">Unit {unitNum}</h5>
+                    <span className="text-xs text-slate-600 font-medium">~8 Hours Prescribed</span>
                   </div>
                   <input
                     type="text"
@@ -125,7 +125,7 @@ export const CurriculumBuilderPage: React.FC = () => {
                       unitNum === 2 ? `Unit ${unitNum}: Inheritance, Polymorphism & Interfaces` :
                       `Unit ${unitNum}: Collections Framework & Exception Handling`
                     }
-                    className="w-full bg-white border-2 border-slate-500 rounded p-2 text-xs font-black text-black mb-2 focus:outline-none focus:border-black"
+                    className="w-full bg-white border border-slate-400 rounded p-2 text-xs font-medium text-slate-900 mb-2 focus:outline-none focus:border-slate-800"
                   />
                   <textarea
                     rows={2}
@@ -134,7 +134,7 @@ export const CurriculumBuilderPage: React.FC = () => {
                       unitNum === 2 ? "Single & Multiple Inheritance, Method Overloading, Method Overriding, Abstract Classes, Interfaces." :
                       "ArrayList, LinkedList, HashMap, TreeMap, Try-Catch, Throws, Custom Exceptions, Finally Block."
                     }
-                    className="w-full bg-white border-2 border-slate-500 rounded p-2 text-xs font-black text-black focus:outline-none focus:border-black"
+                    className="w-full bg-white border border-slate-400 rounded p-2 text-xs font-medium text-slate-900 focus:outline-none focus:border-slate-800"
                   ></textarea>
                 </div>
               ))}
@@ -142,28 +142,28 @@ export const CurriculumBuilderPage: React.FC = () => {
 
             <button
               type="button"
-              className="mt-3 bg-slate-200 hover:bg-slate-300 text-black border-2 border-slate-500 font-black text-xs px-4 py-2 rounded flex items-center space-x-1.5 cursor-pointer"
+              className="mt-3 bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-400 font-medium text-xs px-4 py-2 rounded flex items-center space-x-1.5 cursor-pointer shadow-2xs"
             >
-              <Plus className="w-4 h-4 text-black font-bold" />
+              <Plus className="w-4 h-4 text-slate-900" />
               <span>Add Another Unit</span>
             </button>
           </div>
 
           {/* Action Row */}
-          <div className="flex justify-between items-center pt-2 border-t-2 border-slate-300">
+          <div className="flex justify-between items-center pt-2 border-t border-slate-200">
             <button
               type="button"
-              className="bg-amber-300 hover:bg-amber-400 text-black font-black text-xs px-4 py-2 rounded shadow-2xs flex items-center space-x-1.5 border border-amber-500 cursor-pointer"
+              className="bg-amber-300 hover:bg-amber-400 text-slate-900 font-semibold text-xs px-4 py-2 rounded shadow-2xs flex items-center space-x-1.5 border border-amber-500 cursor-pointer"
             >
-              <Sparkles className="w-4 h-4 text-black font-bold" />
+              <Sparkles className="w-4 h-4 text-slate-900" />
               <span>AI Assist: Suggest Unit Topics</span>
             </button>
 
             <button
               type="submit"
-              className="bg-amber-400 hover:bg-amber-500 text-black font-black text-xs px-5 py-2.5 rounded shadow-xs flex items-center space-x-1.5 border border-amber-600 cursor-pointer"
+              className="bg-amber-400 hover:bg-amber-500 text-slate-900 font-semibold text-xs px-5 py-2.5 rounded shadow-2xs flex items-center space-x-1.5 border border-amber-600 cursor-pointer"
             >
-              <Save className="w-4 h-4 text-black font-bold" />
+              <Save className="w-4 h-4 text-slate-900" />
               <span>Save Course to Draft Curriculum</span>
             </button>
           </div>

@@ -12,12 +12,15 @@ from app.config import settings
 
 router = APIRouter(prefix="/documents", tags=["Documents"])
 
+from app.services.comparison_service import run_semantic_comparison
+from app.db.models import ReferenceCurriculum, Comparison, ComparisonItem, Setting
+
 @router.post("/upload")
 async def upload_curriculum_document(
     university_curriculum_id: int = Form(...),
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role(["university_admin", "faculty", "super_admin"]))
+    current_user: User = Depends(require_role(["university_admin", "faculty", "super_admin", "reviewer"]))
 ):
     uc = db.query(UniversityCurriculum).filter(UniversityCurriculum.id == university_curriculum_id).first()
     if not uc:
@@ -107,10 +110,85 @@ async def upload_curriculum_document(
 
             db.commit()
 
+        # 5. Trigger Real AI Semantic Vector Comparison
+        ref_curr = db.query(ReferenceCurriculum).first()
+        comp_res = None
+        if ref_curr:
+            ref_courses = db.query(Course).filter(Course.reference_curriculum_id == ref_curr.id).all()
+            ref_data = []
+            for rc in ref_courses:
+                units = db.query(Unit).filter(Unit.course_id == rc.id).all()
+                ref_data.append({
+                    "title": rc.title,
+                    "code": rc.code,
+                    "semester": rc.semester,
+                    "credits": rc.credits,
+                    "practical_hours": rc.practical_hours,
+                    "taxonomy_tags": rc.taxonomy_tags,
+                    "units": [{"title": u.title, "topics": u.topics} for u in units]
+                })
+
+            uni_courses_db = db.query(Course).filter(Course.university_curriculum_id == uc.id).all()
+            uni_data = []
+            for uc_c in uni_courses_db:
+                units = db.query(Unit).filter(Unit.course_id == uc_c.id).all()
+                uni_data.append({
+                    "title": uc_c.title,
+                    "code": uc_c.code,
+                    "semester": uc_c.semester,
+                    "credits": uc_c.credits,
+                    "practical_hours": uc_c.practical_hours,
+                    "taxonomy_tags": uc_c.taxonomy_tags,
+                    "units": [{"title": u.title, "topics": u.topics} for u in units]
+                })
+
+            settings_db = db.query(Setting).all()
+            weights = {s.key: float(s.value) for s in settings_db if s.value.replace('.', '', 1).isdigit()}
+
+            comp_res = run_semantic_comparison(ref_data, uni_data, weights)
+
+            db.query(Comparison).filter(Comparison.university_curriculum_id == uc.id).delete()
+            db.commit()
+
+            comp = Comparison(
+                university_curriculum_id=uc.id,
+                reference_curriculum_id=ref_curr.id,
+                overall_score=comp_res["overall_score"],
+                subject_score=comp_res["subject_score"],
+                topic_score=comp_res["topic_score"],
+                credit_score=comp_res["credit_score"],
+                practical_score=comp_res["practical_score"],
+                co_score=comp_res["co_score"],
+                emerging_tech_score=comp_res["emerging_tech_score"],
+                analysis_json={"method": comp_res.get("embedding_engine", "SentenceTransformer"), "total_evaluated": len(comp_res["items"])}
+            )
+            db.add(comp)
+            db.commit()
+
+            for item in comp_res["items"]:
+                ci = ComparisonItem(
+                    comparison_id=comp.id,
+                    ref_course_title=item["ref_course_title"],
+                    ref_topic=item["ref_topic"],
+                    uni_course_title=item["uni_course_title"],
+                    uni_topic=item["uni_topic"],
+                    similarity_score=item["similarity_score"],
+                    status=item["status"],
+                    match_type=item["match_type"],
+                    evidence_location=item["evidence_location"],
+                    gap_description=item["gap_description"],
+                    recommendation=item["recommendation"]
+                )
+                db.add(ci)
+
+            uc.alignment_score = comp_res["overall_score"]
+            uc.reference_curriculum_id = ref_curr.id
+            db.commit()
+
         job.status = "COMPLETED"
         job.current_step = "Completed"
         job.progress_pct = 100.0
-        job.message = f"Extracted {len(extracted['courses'])} courses, {extracted['total_topics']} topics, {extracted['total_cos']} COs across {len(pages_data)} pages."
+        job.message = f"Extracted {len(extracted['courses'])} courses, {extracted['total_topics']} topics across {len(pages_data)} pages. Calculated overall alignment: {uc.alignment_score}%"
         job.extracted_text = raw_text[:3000]
         job.extracted_structure = extracted
         
@@ -131,7 +209,9 @@ async def upload_curriculum_document(
             "pages_processed": len(pages_data),
             "confidence": extracted["overall_confidence"],
             "confidence_label": extracted["confidence_label"],
-            "is_scanned": is_scanned
+            "is_scanned": is_scanned,
+            "alignment_score": uc.alignment_score,
+            "comparison_summary": comp_res
         }
 
     except Exception as e:

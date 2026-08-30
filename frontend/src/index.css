@@ -12,35 +12,69 @@
 @layer base {
   body {
     background-color: #f8fafc;
-    color: #000000;
+    color: #111827;
     font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: 15px;
-    line-height: 1.6;
-    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 400;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    color: #000000 !important;
+    color: #111827 !important;
+    font-weight: 600;
   }
 
   p, span, label, td, th, li {
     color: inherit;
   }
 
-  /* Strict Hover & Active Rules for Light Elements - NEVER TURN TEXT WHITE ON LIGHT BACKGROUNDS */
+  /* Status Badge Utility Classes — Clean, Readable, Non-wrapping */
+  .badge-matched {
+    background-color: #dcfce7 !important; /* emerald-100 */
+    color: #064e3b !important; /* emerald-950 */
+    border: 1px solid #34d399 !important; /* emerald-400 */
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+  }
+
+  .badge-partial {
+    background-color: #fef3c7 !important; /* amber-100 */
+    color: #78350f !important; /* amber-950 */
+    border: 1px solid #fbbf24 !important; /* amber-400 */
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+  }
+
+  .badge-missing {
+    background-color: #fee2e2 !important; /* red-100 */
+    color: #7f1d1d !important; /* red-950 */
+    border: 1px solid #f87171 !important; /* red-400 */
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+  }
+
+  .badge-neutral {
+    background-color: #f1f5f9 !important; /* slate-100 */
+    color: #0f172a !important; /* slate-900 */
+    border: 1px solid #94a3b8 !important; /* slate-400 */
+    font-weight: 500 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Strict Hover & Active Rules — NEVER TURN TEXT WHITE ON LIGHT BACKGROUNDS */
   nav a,
   nav button {
-    color: #000000 !important;
+    color: #111827 !important;
   }
 
   nav a:hover,
   nav button:hover {
-    color: #000000 !important;
+    color: #111827 !important;
   }
 
   nav a.active,
   nav a[aria-current="page"] {
-    color: #000000 !important;
+    color: #111827 !important;
     background-color: #fbbf24 !important; /* Amber 400 */
     border-color: #d97706 !important; /* Amber 600 */
   }
@@ -51,7 +85,7 @@
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible {
-    outline: 3px solid #000000 !important;
+    outline: 2px solid #111827 !important;
     outline-offset: 2px !important;
   }
 }

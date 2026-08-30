@@ -33,15 +33,15 @@ export const Navbar: React.FC<NavbarProps> = () => {
                 key={item.to}
                 to={item.to}
                 className={({ isActive }: { isActive: boolean }) =>
-                  `flex items-center space-x-1.5 px-3 py-2 text-xs font-black rounded whitespace-nowrap transition-all border-2 ${
+                  `flex items-center space-x-1.5 px-3 py-2 text-xs font-semibold rounded whitespace-nowrap transition-all border-2 ${
                     isActive
-                      ? 'bg-amber-400 text-black border-amber-600 shadow-md ring-2 ring-amber-500/50'
-                      : 'bg-white text-black border-slate-400 hover:bg-amber-100 hover:text-black hover:border-amber-500 shadow-2xs'
+                      ? 'bg-amber-400 text-slate-900 border-amber-600 shadow-xs'
+                      : 'bg-white text-slate-900 border-slate-300 hover:bg-amber-100 hover:text-slate-900 hover:border-amber-400 shadow-2xs'
                   }`
                 }
               >
-                <Icon className="w-4 h-4 shrink-0 font-bold text-black" />
-                <span className="tracking-tight text-black">{item.label}</span>
+                <Icon className="w-4 h-4 shrink-0 text-slate-900" />
+                <span className="tracking-tight text-slate-900 font-medium">{item.label}</span>
               </NavLink>
             );
           })}

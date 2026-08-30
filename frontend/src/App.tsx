@@ -28,13 +28,20 @@ export function App() {
   const [notices, setNotices] = useState<any[]>([]);
 
   useEffect(() => {
-    // Check logged in user session
-    api.getMe()
-      .then(setUser)
-      .catch(() => {
-        // Fallback default demo user (Super Admin)
-        setUser({ id: 1, email: 'admin@aicte.gov.in', full_name: 'Dr. K. S. Sharma (AICTE Super Admin)', role: 'super_admin' });
-      });
+    // Check logged in user session or auto-authenticate
+    const token = localStorage.getItem('cisp_token');
+    if (token) {
+      api.getMe()
+        .then(setUser)
+        .catch(() => {
+          localStorage.removeItem('cisp_token');
+          // Perform auto-login to get valid JWT token
+          handleQuickLogin('university_admin');
+        });
+    } else {
+      // Initialize with valid authenticated session
+      handleQuickLogin('university_admin');
+    }
 
     api.getNationalAnalytics().then(setAnalytics).catch(console.error);
     api.getNotices().then(setNotices).catch(console.error);
@@ -69,14 +76,13 @@ export function App() {
       faculty: 'faculty123',
       public: 'public123'
     };
-    const email = roleEmails[role] || 'admin@aicte.gov.in';
-    const pass = rolePasses[role] || 'admin123';
+    const email = roleEmails[role] || 'admin@iitb.ac.in';
+    const pass = rolePasses[role] || 'uni123';
 
     try {
       await handleLogin(email, pass);
     } catch (e) {
-      // Direct mock user fallback if API token fails
-      setUser({ id: 1, email, full_name: `Demo User (${role})`, role });
+      console.error("Login failed:", e);
     }
   };
 

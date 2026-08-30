@@ -33,7 +33,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
+        detail="Your session has expired. Please log in again.",
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
@@ -54,7 +54,7 @@ def require_role(allowed_roles: list[str]):
         if current_user.role not in allowed_roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"Access denied. Required role: {', '.join(allowed_roles)}"
+                detail="You do not have permission to upload curriculum documents."
             )
         return current_user
     return role_checker

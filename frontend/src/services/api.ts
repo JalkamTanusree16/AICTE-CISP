@@ -20,8 +20,24 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
   });
 
   if (!res.ok) {
-    const errorData = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new Error(errorData.detail || `API Request failed with status ${res.status}`);
+    let errorDetail = "";
+    try {
+      const errorData = await res.json();
+      errorDetail = errorData.detail;
+    } catch {
+      errorDetail = res.statusText;
+    }
+
+    if (res.status === 401) {
+      throw new Error(errorDetail && errorDetail !== "Not authenticated" ? errorDetail : "Your session has expired. Please log in again.");
+    } else if (res.status === 403) {
+      throw new Error(errorDetail || "You do not have permission to upload curriculum documents.");
+    } else if (res.status === 400) {
+      throw new Error(errorDetail || "Invalid curriculum document.");
+    } else if (res.status >= 500) {
+      throw new Error(errorDetail || "Document processing failed. Please try again.");
+    }
+    throw new Error(errorDetail || `API Request failed with status ${res.status}`);
   }
 
   return res.json();

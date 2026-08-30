@@ -56,17 +56,17 @@ export const SettingsPage: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6 text-black">
-      <div className="bg-white p-4 rounded border-2 border-slate-400 shadow-2xs">
-        <div className="text-xs font-black text-amber-900 uppercase tracking-wider">AICTE Administrative Council Settings</div>
-        <h2 className="text-xl font-black text-black tracking-tight">Configurable Alignment Scoring Weights</h2>
-        <p className="text-xs text-black font-extrabold">Configure statutory weight distribution for calculating national curriculum alignment percentages</p>
+    <div className="max-w-3xl mx-auto space-y-6 text-slate-900 font-sans">
+      <div className="bg-white p-4 rounded border border-slate-300 shadow-2xs">
+        <div className="text-xs font-semibold text-amber-950 uppercase tracking-wider">AICTE Administrative Council Settings</div>
+        <h2 className="text-xl font-semibold text-slate-900 tracking-tight">Configurable Alignment Scoring Weights</h2>
+        <p className="text-xs text-slate-700 font-medium">Configure statutory weight distribution for calculating national curriculum alignment percentages</p>
       </div>
 
-      <div className="bg-white p-6 rounded border-2 border-slate-400 shadow-2xs space-y-5">
+      <div className="bg-white p-6 rounded border border-slate-300 shadow-2xs space-y-5">
         {saved && (
-          <div className="bg-emerald-100 border-2 border-emerald-500 text-black text-xs p-3 rounded font-black flex items-center space-x-2">
-            <CheckCircle2 className="w-5 h-5 text-emerald-900 font-bold" />
+          <div className="bg-emerald-50 border border-emerald-300 text-emerald-950 text-xs p-3 rounded font-semibold flex items-center space-x-2">
+            <CheckCircle2 className="w-5 h-5 text-emerald-700" />
             <span>AICTE Alignment Scoring Weights saved to database successfully!</span>
           </div>
         )}
@@ -74,8 +74,8 @@ export const SettingsPage: React.FC = () => {
         <form onSubmit={handleSave} className="space-y-4 text-xs">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {weightFields.map((field) => (
-              <div key={field.key} className="p-3 bg-slate-100 border-2 border-slate-400 rounded space-y-1">
-                <label className="block font-black text-black text-xs uppercase tracking-wide">{field.label}</label>
+              <div key={field.key} className="p-3 bg-slate-50 border border-slate-300 rounded space-y-1">
+                <label className="block font-semibold text-slate-900 text-xs uppercase tracking-wide">{field.label}</label>
                 <input
                   type="number"
                   step="0.05"
@@ -83,19 +83,19 @@ export const SettingsPage: React.FC = () => {
                   max="1"
                   value={(weights as any)[field.key]}
                   onChange={(e) => setWeights({ ...weights, [field.key]: parseFloat(e.target.value) })}
-                  className="w-full bg-white border-2 border-slate-500 rounded p-2 text-xs font-black text-black focus:outline-none focus:border-black"
+                  className="w-full bg-white border border-slate-400 rounded p-2 text-xs font-medium text-slate-900 focus:outline-none focus:border-slate-800"
                 />
-                <span className="text-[11px] text-black font-extrabold">Default: {field.default}</span>
+                <span className="text-[11px] text-slate-600 font-medium">Default: {field.default}</span>
               </div>
             ))}
           </div>
 
-          <div className="bg-amber-100 border-2 border-amber-400 p-3 rounded text-xs text-black font-black space-y-1">
-            <div className="font-black text-black">Current Total Weight:</div>
-            <div className="text-sm font-black text-black">
+          <div className="bg-amber-50 border border-amber-300 p-3 rounded text-xs text-slate-900 font-medium space-y-1">
+            <div className="font-semibold text-slate-900">Current Total Weight:</div>
+            <div className="text-sm font-semibold text-slate-900">
               {(Object.values(weights).reduce((a, b) => a + b, 0) * 100).toFixed(0)}% 
               {' '}
-              <span className={Object.values(weights).reduce((a, b) => a + b, 0) === 1.0 ? 'text-black' : 'text-red-900 underline'}>
+              <span className={Object.values(weights).reduce((a, b) => a + b, 0) === 1.0 ? 'text-slate-900' : 'text-red-950 underline'}>
                 (Must sum to exactly 100%)
               </span>
             </div>
@@ -103,9 +103,9 @@ export const SettingsPage: React.FC = () => {
 
           <button
             type="submit"
-            className="bg-amber-400 hover:bg-amber-500 text-black font-black text-xs px-5 py-2.5 rounded shadow-xs flex items-center space-x-1.5 border border-amber-600 cursor-pointer"
+            className="bg-amber-400 hover:bg-amber-500 text-slate-900 font-semibold text-xs px-5 py-2.5 rounded shadow-2xs flex items-center space-x-1.5 border border-amber-600 cursor-pointer"
           >
-            <Save className="w-4 h-4 text-amber-300 font-bold" />
+            <Save className="w-4 h-4 text-slate-900" />
             <span>Update AICTE Scoring Formula in Database</span>
           </button>
         </form>
