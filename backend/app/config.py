@@ -12,9 +12,9 @@ class Settings(BaseSettings):
     # DB settings (PostgreSQL supported, SQLite fallback)
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./cisp.db")
     
-    # Uploads, Extracted & Reports directories
+    # Dynamic storage location (use /tmp on Vercel / serverless)
     BASE_DIR: str = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-    STORAGE_DIR: str = os.path.join(BASE_DIR, "storage")
+    STORAGE_DIR: str = "/tmp/storage" if (os.getenv("VERCEL") or not os.access(BASE_DIR, os.W_OK)) else os.path.join(BASE_DIR, "storage")
     UPLOAD_DIR: str = os.path.join(STORAGE_DIR, "uploads")
     EXTRACTED_DIR: str = os.path.join(STORAGE_DIR, "extracted")
     REPORTS_DIR: str = os.path.join(STORAGE_DIR, "reports")
@@ -32,7 +32,10 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-os.makedirs(settings.STORAGE_DIR, exist_ok=True)
-os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
-os.makedirs(settings.EXTRACTED_DIR, exist_ok=True)
-os.makedirs(settings.REPORTS_DIR, exist_ok=True)
+try:
+    os.makedirs(settings.STORAGE_DIR, exist_ok=True)
+    os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
+    os.makedirs(settings.EXTRACTED_DIR, exist_ok=True)
+    os.makedirs(settings.REPORTS_DIR, exist_ok=True)
+except Exception:
+    pass

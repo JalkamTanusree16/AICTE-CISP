@@ -26,9 +26,14 @@ app = FastAPI(
 )
 
 # CORS Middleware setup
+frontend_url = os.getenv("FRONTEND_URL", "*")
+allowed_origins = [frontend_url] if frontend_url != "*" else ["*"]
+if frontend_url != "*":
+    allowed_origins.extend(["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000"])
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -51,6 +56,10 @@ app.include_router(reports.router, prefix=settings.API_V1_STR)
 app.include_router(notices.router, prefix=settings.API_V1_STR)
 app.include_router(audit_logs.router, prefix=settings.API_V1_STR)
 app.include_router(settings_api.router, prefix=settings.API_V1_STR)
+
+@app.get("/health")
+def health_simple():
+    return {"status": "healthy"}
 
 @app.get("/")
 def root():
