@@ -12,12 +12,12 @@ from app.api import (
     audit_logs, settings as settings_api
 )
 
-# Initialize database tables and seed initial data
-Base.metadata.create_all(bind=engine)
+# Initialize database tables and seed initial data safely
 try:
+    Base.metadata.create_all(bind=engine)
     seed_database()
 except Exception as e:
-    print(f"Seed note: {e}")
+    print(f"Database initialization note: {e}")
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

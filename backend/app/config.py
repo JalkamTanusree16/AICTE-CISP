@@ -9,11 +9,14 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 # 24 hours
     
-    # DB settings (PostgreSQL supported, SQLite fallback)
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./cisp.db")
-    
-    # Dynamic storage location (use /tmp on Vercel / serverless)
+    # Dynamic base directory and storage location
     BASE_DIR: str = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    DEFAULT_DB_URL: str = "sqlite:////tmp/cisp.db" if (os.getenv("VERCEL") or not os.access(BASE_DIR, os.W_OK)) else "sqlite:///./cisp.db"
+    
+    # DB settings (PostgreSQL supported, SQLite fallback)
+    DATABASE_URL: str = os.getenv("DATABASE_URL", DEFAULT_DB_URL)
+    
+    # Storage directories (use /tmp on Vercel / serverless)
     STORAGE_DIR: str = "/tmp/storage" if (os.getenv("VERCEL") or not os.access(BASE_DIR, os.W_OK)) else os.path.join(BASE_DIR, "storage")
     UPLOAD_DIR: str = os.path.join(STORAGE_DIR, "uploads")
     EXTRACTED_DIR: str = os.path.join(STORAGE_DIR, "extracted")
