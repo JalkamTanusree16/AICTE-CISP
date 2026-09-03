@@ -1,4 +1,13 @@
-const API_BASE_URL = (import.meta.env as any).VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
+const getApiBaseUrl = () => {
+  const envUrl = (import.meta.env as any).VITE_API_URL || (import.meta.env as any).VITE_API_BASE_URL;
+  if (!envUrl) {
+    return "http://127.0.0.1:8000/api";
+  }
+  const cleanUrl = envUrl.replace(/\/+$/, "");
+  return cleanUrl.endsWith("/api") ? cleanUrl : `${cleanUrl}/api`;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export async function fetchApi(endpoint: string, options: RequestInit = {}) {
   const token = localStorage.getItem("cisp_token");
