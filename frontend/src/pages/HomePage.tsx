@@ -16,7 +16,7 @@ export const HomePage: React.FC<HomePageProps> = ({ analytics }) => {
             <ShieldCheck className="w-4 h-4 text-amber-400" />
             <span>Smart India Hackathon Statutory Initiative • AICTE CISP</span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight leading-snug text-white">
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight leading-snug text-white" style={{ color: '#ffffff' }}>
             National Curriculum Intelligence & Academic Standardization Platform
           </h2>
           <p className="text-slate-200 text-sm font-medium leading-relaxed">
