@@ -23,10 +23,15 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
     headers["Content-Type"] = "application/json";
   }
 
-  const res = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE_URL}${endpoint}`, {
+      ...options,
+      headers,
+    });
+  } catch (err: any) {
+    throw new Error(`Connection error fetching ${API_BASE_URL}${endpoint}. ${err.message || ''}`);
+  }
 
   if (!res.ok) {
     let errorDetail = "";

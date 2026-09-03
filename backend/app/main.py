@@ -26,14 +26,23 @@ app = FastAPI(
 )
 
 # CORS Middleware setup
-frontend_url = os.getenv("FRONTEND_URL", "*")
-allowed_origins = [frontend_url] if frontend_url != "*" else ["*"]
-if frontend_url != "*":
-    allowed_origins.extend(["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000"])
+frontend_url = os.getenv("FRONTEND_URL", "*").strip().rstrip("/")
+allowed_origins = [
+    frontend_url,
+    f"{frontend_url}/",
+    "https://aicte-cisp-frontend.vercel.app",
+    "https://aicte-cisp-frontend.vercel.app/",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000"
+]
+if not frontend_url or frontend_url == "*":
+    allowed_origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app|http://localhost:\d+|http://127\.0\.0\.1:\d+",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
